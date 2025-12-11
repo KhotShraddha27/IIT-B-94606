@@ -6,7 +6,7 @@ with open("products.csv", "r") as file:
     rows = list(reader)
 
 # a) Row in clean format
-print("---- PRODUCT DETAILS ----")
+print("PRODUCT DETAILS")
 for row in rows:
     print(f"ID: {row['product_id']}, Product_Name: {row['product_name']}, Category: {row['category']}, "
           f"Price: {row['price']}, Quantity: {row['quantity']}")
