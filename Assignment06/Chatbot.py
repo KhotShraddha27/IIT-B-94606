@@ -2,12 +2,9 @@ import os
 import json
 import requests
 import streamlit as st
-from dotenv import load_dotenv
 
 st.set_page_config(page_title="Groq vs LM Studio Chatbot")
 st.title("💬 Multi-LLM Chatbot")
-
-load_dotenv()
 
 st.sidebar.title("⚙️ Settings")
 
