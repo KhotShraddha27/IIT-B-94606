@@ -2,19 +2,10 @@ import os
 import json
 import requests
 import streamlit as st
-from dotenv import load_dotenv
 
-# ===============================
-# APP CONFIG
-# ===============================
 st.set_page_config(page_title="Groq vs LM Studio Chatbot")
 st.title("💬 Multi-LLM Chatbot")
 
-load_dotenv()
-
-# ===============================
-# SIDEBAR
-# ===============================
 st.sidebar.title("⚙️ Settings")
 
 llm_choice = st.sidebar.radio(
@@ -32,34 +23,22 @@ if st.sidebar.button("🆕 New Chat"):
 
 show_history = st.sidebar.checkbox("📜 Show Chat History", value=True)
 
-# ===============================
-# SESSION STATE
-# ===============================
 if "groq_messages" not in st.session_state:
     st.session_state.groq_messages = []
 
 if "lm_messages" not in st.session_state:
     st.session_state.lm_messages = []
 
-# ===============================
-# SELECT ACTIVE HISTORY
-# ===============================
 if llm_choice == "Groq (Cloud)":
     messages = st.session_state.groq_messages
 else:
     messages = st.session_state.lm_messages
 
-# ===============================
-# DISPLAY CHAT HISTORY
-# ===============================
 if show_history:
     for msg in messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-# ===============================
-# USER INPUT
-# ===============================
 user_prompt = st.chat_input("Ask anything...")
 
 if user_prompt:
@@ -68,9 +47,6 @@ if user_prompt:
     with st.chat_message("user"):
         st.markdown(user_prompt)
 
-    # ===============================
-    # GROQ API
-    # ===============================
     if llm_choice == "Groq (Cloud)":
         api_key = os.getenv("GROQ_API_KEY")
 
@@ -91,9 +67,6 @@ if user_prompt:
 
         answer = resp["choices"][0]["message"]["content"]
 
-    # ===============================
-    # LM STUDIO API
-    # ===============================
     else:
         try:
             url = "http://127.0.0.1:1234/v1/chat/completions"
@@ -116,9 +89,6 @@ if user_prompt:
         except requests.exceptions.ConnectionError:
             answer = "❌ LM Studio server is not running. Please start it."
 
-    # ===============================
-    # SAVE & DISPLAY RESPONSE
-    # ===============================
     messages.append({"role": "assistant", "content": answer})
 
     with st.chat_message("assistant"):
