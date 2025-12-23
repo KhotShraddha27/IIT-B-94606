@@ -11,7 +11,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-# ---------------- LLM SETUP ----------------
 llm = init_chat_model(
     model="llama-3.3-70b-versatile",
     model_provider="groq",
@@ -19,9 +18,8 @@ llm = init_chat_model(
 )
 
 st.set_page_config(page_title="Multi-Agent App", layout="wide")
-st.title("🤖 Multi-Agent Intelligent Application")
+st.title("Agent")
 
-# ---------------- SESSION STATE ----------------
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -34,15 +32,13 @@ if "sunbeam_df" not in st.session_state:
 if "csv_df" not in st.session_state:
     st.session_state.csv_df = None
 
-# ---------------- AGENT SELECTION ----------------
 agent = st.sidebar.selectbox(
     "Choose Agent",
     ["CSV Question Answering Agent", "Sunbeam Web Scraping Agent"]
 )
 
-st.session_state.selected_agent = agent  # just track selected agent, no hiding logic
+st.session_state.selected_agent = agent  
 
-# 1️⃣ CSV QUESTION ANSWERING AGENT
 if agent == "CSV Question Answering Agent":
     st.header("📊 CSV Question Answering Agent")
 
@@ -57,7 +53,6 @@ if agent == "CSV Question Answering Agent":
         st.subheader("CSV Schema")
         st.write(df.dtypes)
 
-        # -------- FORM WITH SUBMIT BUTTON --------
         with st.form("csv_form"):
             question = st.text_input("Ask a question about this CSV")
             submit_csv = st.form_submit_button("Submit")
@@ -108,11 +103,9 @@ Result:
             else:
                 st.error("Could not generate SQL")
 
-# 2️⃣ SUNBEAM WEB SCRAPING AGENT
 elif agent == "Sunbeam Web Scraping Agent":
     st.header("🌐 Sunbeam Web Scraping Agent")
 
-    # -------- Fetch data button --------
     if st.button("Fetch Internship & Batch Info") or st.session_state.sunbeam_df is not None:
 
         if st.session_state.sunbeam_df is None:
@@ -143,8 +136,6 @@ elif agent == "Sunbeam Web Scraping Agent":
 
         sunbeam_df = st.session_state.sunbeam_df
         st.dataframe(sunbeam_df)
-
-        # -------- FORM WITH SUBMIT BUTTON --------
         with st.form("sunbeam_form"):
             question = st.text_input("Ask a question about Sunbeam internships")
             submit_sunbeam = st.form_submit_button("Submit")
@@ -155,7 +146,6 @@ Answer the following question using this data.
 
 Data:
 {sunbeam_df}
-
 Question:
 {question}
 
@@ -166,11 +156,8 @@ Explain the answer in simple English.
             st.write(explanation)
 
             st.session_state.chat_history.append(("Sunbeam Agent", question, explanation))
-
-# 🧠 CHAT HISTORY
 st.sidebar.subheader("📝 Chat History")
 
-# Dropdown (expander) for chat history
 with st.sidebar.expander("View Chat History", expanded=True):
     if st.session_state.chat_history:
         for agent_name, question, _ in st.session_state.chat_history:  # show only question
