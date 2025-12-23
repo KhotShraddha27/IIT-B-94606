@@ -11,7 +11,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-# ---------------- LLM SETUP ----------------
 llm = init_chat_model(
     model="llama-3.3-70b-versatile",
     model_provider="groq",
@@ -21,7 +20,6 @@ llm = init_chat_model(
 st.set_page_config(page_title="Multi-Agent App", layout="wide")
 st.title("🤖 Multi-Agent Intelligent Application")
 
-# ---------------- SESSION STATE ----------------
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -34,7 +32,6 @@ if "sunbeam_df" not in st.session_state:
 if "csv_df" not in st.session_state:
     st.session_state.csv_df = None
 
-# ---------------- AGENT SELECTION ----------------
 agent = st.sidebar.selectbox(
     "Choose Agent",
     ["CSV Question Answering Agent", "Sunbeam Web Scraping Agent"]
@@ -57,7 +54,6 @@ if agent == "CSV Question Answering Agent":
         st.subheader("CSV Schema")
         st.write(df.dtypes)
 
-        # -------- FORM WITH SUBMIT BUTTON --------
         with st.form("csv_form"):
             question = st.text_input("Ask a question about this CSV")
             submit_csv = st.form_submit_button("Submit")
@@ -112,7 +108,6 @@ Result:
 elif agent == "Sunbeam Web Scraping Agent":
     st.header("🌐 Sunbeam Web Scraping Agent")
 
-    # -------- Fetch data button --------
     if st.button("Fetch Internship & Batch Info") or st.session_state.sunbeam_df is not None:
 
         if st.session_state.sunbeam_df is None:
@@ -144,7 +139,6 @@ elif agent == "Sunbeam Web Scraping Agent":
         sunbeam_df = st.session_state.sunbeam_df
         st.dataframe(sunbeam_df)
 
-        # -------- FORM WITH SUBMIT BUTTON --------
         with st.form("sunbeam_form"):
             question = st.text_input("Ask a question about Sunbeam internships")
             submit_sunbeam = st.form_submit_button("Submit")
