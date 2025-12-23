@@ -136,6 +136,10 @@ elif agent == "Sunbeam Web Scraping Agent":
 
         sunbeam_df = st.session_state.sunbeam_df
         st.dataframe(sunbeam_df)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c8ad8c67ca8add4cf408d038a0b7ec55f9f9428
         with st.form("sunbeam_form"):
             question = st.text_input("Ask a question about Sunbeam internships")
             submit_sunbeam = st.form_submit_button("Submit")
